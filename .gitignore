@@ -1,0 +1,42 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+.idea/
+*.db
+*-journal
+bin/
+dlb.env
+tmp/
+
+*-packr.go
+sbin/
+.DS_Store
+
+# Node & NPM related
+node_modules
+npm-debug.log
+
+# VS Code
+.vscode/*
+
+# Reporter results
+**/int-tests/support/reporter_results/*
+**/int-tests/support/rerunner/*
+**/int-tests/gen/*
+
+# Gradle
+.gradle/
+
+# Java Build
+build/
+
+

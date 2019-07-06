@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option go_package = "github.com/chrisfesler/grpc_fun/pkg/echo";
+
+package echo;
+
+service Echo {
+    rpc Echo (EchoMsg) returns (EchoMsg) {}
+}
+
+message EchoMsg {
+    string msg = 1;
+}
+
