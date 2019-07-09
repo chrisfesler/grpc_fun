@@ -1,13 +1,17 @@
 PROTO_SRC=$(shell find . -name '*.proto')
 PROTO_GEN=$(PROTO_SRC:.proto=.pb.go)
+PROTO_PLUGINS=github.com/golang/protobuf/protoc-gen-go	
 
 BINDIR?=$(PWD)/bin
 
 GOPATH?=$(go env GOPATH)
+PROTO_BIN?=$(BINDIR)/proto-plugins
 
 export GOBIN=$(BINDIR)
 export PATH:=$(GOBIN):$(PATH)
 export GO111MODULE=on
+
+build: clean proto vet install
 
 clean: proto-clean
 	rm -rf $(BINDIR)
@@ -15,15 +19,13 @@ clean: proto-clean
 proto-clean:
 	rm $(PROTO_GEN) || true
 
-build: clean proto vet go-build install
-
 vet:
 	go vet ./...
 
-go-build:
-	go build ./...
+protoc-plugins:
+	GOBIN=$(PROTO_BIN) go install $(PROTO_PLUGINS)
 
-proto:
+proto: protoc-plugins
 	protoc -I . $(PROTO_SRC) --go_out=plugins=grpc,paths=source_relative:.
 
 install:
