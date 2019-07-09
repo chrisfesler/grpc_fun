@@ -16,7 +16,7 @@ const (
 
 type server struct{}
 
-func (s *server) Echo(ctx context.Context, in *echo.EchoMsg) (*echo.EchoMsg, error) {
+func (*server) Echo(ctx context.Context, in *echo.EchoMsg) (*echo.EchoMsg, error) {
 	app.Log.Infow("Echo!",
 		"message", in.Msg,
 	)
