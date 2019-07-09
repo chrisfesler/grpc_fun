@@ -2,10 +2,11 @@ package main
 
 import (
 	"context"
+	"time"
+
 	"github.com/chrisfesler/grpc_fun/pkg/app"
 	"github.com/chrisfesler/grpc_fun/pkg/echo"
 	"google.golang.org/grpc"
-	"time"
 )
 
 const (
@@ -21,7 +22,6 @@ func main() {
 	cli := echo.NewEchoClient(conn)
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
 	r, err := cli.Echo(ctx, &echo.EchoMsg{Msg: "Echo!"})
 	if err != nil {
 		app.Log.Fatalf("Shouting into the void: %v", err)
