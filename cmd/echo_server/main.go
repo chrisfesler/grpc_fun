@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"go.uber.org/zap"
 	"net"
 
 	"github.com/chrisfesler/grpc_fun/pkg/app"
@@ -14,25 +15,29 @@ const (
 	port = ":50051"
 )
 
+var log *zap.Logger
+
 type server struct{}
 
+func init() {
+	log = app.LoggerWith(zap.String("some", "val"))
+}
+
 func (*server) Echo(ctx context.Context, in *echo.EchoMsg) (*echo.EchoMsg, error) {
-	app.Log.Infow("Echo!",
-		"message", in.Msg,
-	)
+	log.Info("Echo!", zap.String("message", in.Msg))
 
 	return in, nil
 }
 
 func main() {
-	app.Log.Infof("echo_server started at %v", port)
+	log.Info("echo_server started at %v", zap.String("port", port))
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
-		app.Log.Fatalf("cannot listen at port %s: %v", port, err)
+		log.Fatal("failed to listen", zap.String("port", port), zap.Error(err))
 	}
 	s := grpc.NewServer()
 	echo.RegisterEchoServer(s, &server{})
 	if err := s.Serve(lis); err != nil {
-		app.Log.Fatalf("Serve failed: %v", err)
+		log.Fatal("Serve failed", zap.Error(err))
 	}
 }
